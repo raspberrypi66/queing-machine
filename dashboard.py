@@ -5,6 +5,16 @@ import sys
 import time
 import paho.mqtt.client as mqtt
 from subprocess import Popen
+
+def drawRow(rowNo,value):
+ global srf
+ row=int(rowNo);
+ pygame.draw.rect(srf, (60,60,60), [400, 60+(60*row), 150, 50])
+ pygame.draw.rect(srf, (0,100,60), [550, 60+(60*row), 150, 50])
+ srf.blit(f.render(str(row+1),True,(255,0,0)),(450,60+(60*row)))
+ srf.blit(f.render(str(value),True,(255,0,0)),(600,60+(60*row)))
+ pygame.display.update()
+
 def updateRow(topic,value):
  print"update"
  global srf
@@ -51,25 +61,8 @@ f = pygame.font.Font("Loma.ttf",32)
 srf.blit(f.render("Counter",True,(255,0,0)),(420,10))
 srf.blit(f.render("Number",True,(255,0,0)),(570,10))
 
-pygame.draw.rect(srf, (60,60,60), [400, 60, 150, 50])
-pygame.draw.rect(srf, (0,100,60), [550, 60, 150, 50])
-srf.blit(f.render("1",True,(255,0,0)),(450,60))
-srf.blit(f.render(" ",True,(255,0,0)),(600,60))
-
-pygame.draw.rect(srf, (60,60,60), [400, 60+60, 150, 50])
-pygame.draw.rect(srf, (0,100,60), [550, 60+60, 150, 50])
-srf.blit(f.render("2",True,(255,0,0)),(450,60+60))
-srf.blit(f.render(" ",True,(255,0,0)),(600,60+60))
-
-pygame.draw.rect(srf, (60,60,60), [400, 60+(60*2), 150, 50])
-pygame.draw.rect(srf, (0,100,60), [550, 60+(60*2), 150, 50])
-srf.blit(f.render("3",True,(255,0,0)),(450,60+(60*2)))
-srf.blit(f.render(" ",True,(255,0,0)),(600,60+(60*2)))
-
-pygame.draw.rect(srf, (60,60,60), [400, 60+(60*3), 150, 50])
-pygame.draw.rect(srf, (0,100,60), [550, 60+(60*3), 150, 50])
-srf.blit(f.render("4",True,(255,0,0)),(450,60+(60*3)))
-srf.blit(f.render(" ",True,(255,0,0)),(600,60+(60*3)))
+for i in range(0,5):
+ drawRow(i,"")
 
 pygame.mouse.set_visible(0)
 pygame.display.flip()

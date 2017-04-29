@@ -20,7 +20,7 @@ try:
  cur.execute(sql)
  for row in cur.fetchall():
   print row
- sql= "insert into current_queue(counter_no,ticket_no) values(%s,%s)"
+ sql= "insert into current_queue(counter_no,ticket_no) values(%s,%s) on duplicate key update ticket_no=values(ticket_no)"
  cur.execute(sql,(counter_no,row[1]))
  cur.execute("delete from queue where queue_id=%s",(row[0])) 
  db.commit()
