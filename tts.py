@@ -42,7 +42,7 @@ def speak(q,c):
  print "Speak..."
  pygame.mixer.init()
  for s in tts :
-  pygame.mixer.music.load("voices/"+s+".mp3")
+  pygame.mixer.music.load("/home/pi/queing-machine/voices/"+s+".mp3")
   pygame.mixer.music.play(0,-1)
   while pygame.mixer.music.get_busy():
    time.sleep(0.1)
