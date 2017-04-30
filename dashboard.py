@@ -5,7 +5,9 @@ import sys
 import time
 import paho.mqtt.client as mqtt
 from subprocess import Popen
+from tts import speak
 
+#speak("1","100")
 def drawRow(rowNo,value):
  global srf
  row=int(rowNo);
@@ -24,8 +26,8 @@ def updateRow(topic,value):
  pygame.draw.rect(srf, (0,100,60), [550, 60+(60*row), 150, 50])
  srf.blit(f.render(str(row+1),True,(255,0,0)),(450,60+(60*row)))
  srf.blit(f.render(str(value),True,(255,0,0)),(600,60+(60*row)))
- Popen("python tts.py "+str(value)+" "+topic[12:], shell=True )
  pygame.display.update()
+ speak(str(value),topic[12:])
 
 def on_connect(mosq, obj, rc):
     print("rc: " + str(rc))
@@ -48,13 +50,15 @@ mqttc.on_message = on_message
 mqttc.on_connect = on_connect
 mqttc.on_publish = on_publish
 mqttc.on_subscribe = on_subscribe
-mqttc.connect("localhost",1883,60)
-mqttc.subscribe("/queue/call/#", 0)
-mqttc.loop_start()
+#mqttc.connect("localhost",1883,60)
+#mqttc.subscribe("/queue/call/#", 0)
+#mqttc.loop_start()
 
 pygame.font.init()
 srf = pygame.display.set_mode((800,480))
-srf.fill((150,150,150))
+#srf.fill((150,150,150))
+bg=pygame.image.load("bg.jpg")
+srf.blit(bg,(0,0))
 
 f = pygame.font.Font("Loma.ttf",32)
 
@@ -67,6 +71,9 @@ for i in range(0,5):
 pygame.mouse.set_visible(0)
 pygame.display.flip()
 pygame.display.toggle_fullscreen()
+mqttc.connect("localhost",1883,60)
+mqttc.subscribe("/queue/call/#", 0)
+mqttc.loop_start()
 
 counter=0
 while True:
