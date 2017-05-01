@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import pygame
@@ -9,12 +10,15 @@ from tts import speak
 
 #speak("1","100")
 def drawRow(rowNo,value):
+ #value="0"
  global srf
+ global maxX
+ global maxY
  row=int(rowNo);
- pygame.draw.rect(srf, (60,60,60), [400, 60+(60*row), 150, 50])
- pygame.draw.rect(srf, (0,100,60), [550, 60+(60*row), 150, 50])
- srf.blit(f.render(str(row+1),True,(255,0,0)),(450,60+(60*row)))
- srf.blit(f.render(str(value),True,(255,0,0)),(600,60+(60*row)))
+ pygame.draw.rect(srf, (60,60,60), [maxX-580, 150+(90*row), 280, 80])
+ pygame.draw.rect(srf, (0,100,60), [maxX-300, 150+(90*row), 280, 80])
+ srf.blit(f.render(str(row+1),True,(255,0,0)),(maxX-450,140+(90*row)))
+ srf.blit(f.render(str(value),True,(255,0,0)),(maxX-180,140+(90*row)))
  pygame.display.update()
 
 def updateRow(topic,value):
@@ -22,10 +26,10 @@ def updateRow(topic,value):
  global srf
  row=topic[12:]
  row=int(row)-1;
- pygame.draw.rect(srf, (60,60,60), [400, 60+(60*row), 150, 50])
- pygame.draw.rect(srf, (0,100,60), [550, 60+(60*row), 150, 50])
- srf.blit(f.render(str(row+1),True,(255,0,0)),(450,60+(60*row)))
- srf.blit(f.render(str(value),True,(255,0,0)),(600,60+(60*row)))
+ pygame.draw.rect(srf, (60,60,60), [maxX-580, 150+(90*row), 280, 80])
+ pygame.draw.rect(srf, (0,100,60), [maxX-300, 150+(90*row), 280, 80])
+ srf.blit(f.render(str(row+1),True,(255,0,0)),(maxX-450,140+(90*row)))
+ srf.blit(f.render(str(value),True,(255,0,0)),(maxX-180,140+(90*row)))
  pygame.display.update()
  speak(str(value),topic[12:])
 
@@ -55,15 +59,19 @@ mqttc.on_subscribe = on_subscribe
 #mqttc.loop_start()
 
 pygame.font.init()
-srf = pygame.display.set_mode((800,480))
-#srf.fill((150,150,150))
-bg=pygame.image.load("bg.jpg")
-srf.blit(bg,(0,0))
+maxX=1800
+maxY=1024
+srf = pygame.display.set_mode((maxX,maxY))
+srf.fill((150,150,150))
+path="/home/pi/queing-machine/"
+bg=pygame.image.load(path+"/bg.jpg")
+#image position
+srf.blit(bg,(120,150))
 
-f = pygame.font.Font("Loma.ttf",32)
+f = pygame.font.Font(path+"Loma.ttf",64)
 
-srf.blit(f.render("Counter",True,(255,0,0)),(420,10))
-srf.blit(f.render("Number",True,(255,0,0)),(570,10))
+srf.blit(f.render("Counter",True,(255,0,0)),(maxX-550,40))
+srf.blit(f.render("Number",True,(255,0,0)),(maxX-270,40))
 
 for i in range(0,5):
  drawRow(i,"")
