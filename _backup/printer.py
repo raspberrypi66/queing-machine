@@ -21,11 +21,24 @@ try:
  cur.execute(sql)
  for row in cur.fetchall():
   print row
- sql = "INSERT INTO `queue`(ticket_no,service_type_id) VALUES (%s,%s)"
- cur.execute(sql,(row[0],1))
+ #this is your ticket no
+ ticketNo=row[0]
+
+ #if ticketNo==0 mean first queue of the day reset current queue to 1
+ sql="update current_queue set ticket_no=null"
+ cur.execute(sql)
  db.commit()
 
- ticketNo=row[0]
+ sql = "INSERT INTO `queue`(ticket_no,service_type_id) VALUES (%s,%s)"
+ cur.execute(sql,(row[0],1))
+ db.commit() 
+ 
+ sql="select ifnull(max(ticket_no),0) from current_queue" 
+ cur.execute(sql)
+ for row in cur.fetchall():
+  print row
+ waitNo=ticketNo-row[0]
+
  #print out ticket
  Epson = printer.Usb(0x0fe6,0x811e,0,0x82,0x02)
  Epson.set(align='center')
@@ -43,7 +56,7 @@ try:
  # draw the text at the left edge of the box
  draw.text((30, 0), u'ลำดับเลขที่    '   , font=font)
  draw.text((40, 40), str(ticketNo), font=font2)
- waitNo=5
+ #waitNo=5
  draw.text((40, 180), u'จำนวนที่รอ : '+str(waitNo)+u' คิว ', font=font3)
  image = ImageOps.invert(image)   # invert image to black on white
  Epson.image(image,impl="bitImageRaster")      # output image to printer

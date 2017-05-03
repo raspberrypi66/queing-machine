@@ -58,7 +58,6 @@ mqttc.on_subscribe = on_subscribe
 #mqttc.subscribe("/queue/call/#", 0)
 #mqttc.loop_start()
 
-pygame.font.init()
 maxX=1800
 maxY=1024
 srf = pygame.display.set_mode((maxX,maxY))
@@ -68,6 +67,7 @@ bg=pygame.image.load(path+"/bg.jpg")
 #image position
 srf.blit(bg,(120,150))
 
+pygame.font.init()
 f = pygame.font.Font(path+"Loma.ttf",64)
 
 srf.blit(f.render("Counter",True,(255,0,0)),(maxX-550,40))
